@@ -15,19 +15,19 @@ private:
     long vert_dist_to_mirror;
 
     void process_horiz_reflection() {
-        int columnMatchesGrid[columns][columns];
+        bool columnMatchesGrid[columns][columns];
 
         for (int currColumn = 0; currColumn < columns; currColumn++) {
             for (int compareColumn = 0; compareColumn < columns ; compareColumn++) {
-                int numDiffs = 0;
+                bool isMatch = true;
                 if (currColumn != compareColumn) {
-                    for (int currRow = 0; currRow < rows && numDiffs < 2; currRow++) {
-                        numDiffs += (charGrid[currRow][currColumn] == charGrid[currRow][compareColumn]);
+                    for (int currRow = 0; currRow < rows && isMatch; currRow++) {
+                        isMatch = (charGrid[currRow][currColumn] == charGrid[currRow][compareColumn]);
                     }
-                    columnMatchesGrid[currColumn][compareColumn] = numDiffs;
+                    columnMatchesGrid[currColumn][compareColumn] = isMatch;
                 }
                 else {
-                    columnMatchesGrid[currColumn][compareColumn] = 2;
+                    columnMatchesGrid[currColumn][compareColumn] = false;
                 }
             }
         }
@@ -35,18 +35,14 @@ private:
         bool leftSideMatch = false;
         int leftColumn = 0;
         for (int compareColumn = 1; compareColumn < columns && !leftSideMatch; compareColumn++) {
-            int sum_of_diffs = columnMatchesGrid[leftColumn][compareColumn];
-            if (sum_of_diffs < 2) {
+            if (columnMatchesGrid[leftColumn][compareColumn]) {
                 int leftPos = leftColumn;
                 int rightPos = compareColumn;
-                int prev_sum_of_diffs = sum_of_diffs;
-                while (leftPos < rightPos && sum_of_diffs < 2) {
-                    prev_sum_of_diffs = sum_of_diffs;
+                while (leftPos < rightPos && columnMatchesGrid[leftPos][rightPos]) {
                     leftPos++;
                     rightPos--;
-                    sum_of_diffs += columnMatchesGrid[leftPos][rightPos];
                 }
-                if (leftPos > rightPos && prev_sum_of_diffs == 1) {
+                if (leftPos > rightPos) {
                     horiz_dist_to_mirror = leftPos;
                     horiz_reflection = true;
                     leftSideMatch = true;
@@ -200,10 +196,6 @@ public:
         }
         cout << endl;
     }
-
-    void print_reflection() {
-        // TODO implement
-    }
 };
 
 int main(int argc, char **argv) {
@@ -217,16 +209,11 @@ int main(int argc, char **argv) {
     while (getline(input_file, line)) {
         LavaGrid lavaGrid(input_file, line);
         if (lavaGrid.is_horiz_reflection()) {
-            cout << "horizontal, " << lavaGrid.get_horizontal_distance() << endl;
-            lavaGrid.print_grid();
             horizontal_distances += lavaGrid.get_horizontal_distance();
         }
-        if (lavaGrid.is_vert_reflection()) {
-            cout << "vertical, " << lavaGrid.get_vertical_distance() << endl;
-            lavaGrid.print_grid();
+        else if (lavaGrid.is_vert_reflection()) {
             vertical_distances += lavaGrid.get_vertical_distance();
         }
-        cout << endl;
     }
 
     sum_of_notes = (100 * vertical_distances) + horizontal_distances;
