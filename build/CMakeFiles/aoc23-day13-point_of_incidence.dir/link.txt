@@ -1,0 +1,1 @@
+/usr/bin/c++ -g -rdynamic "CMakeFiles/aoc23-day13-point_of_incidence.dir/main.cpp.o" -o aoc23-day13-point_of_incidence 
