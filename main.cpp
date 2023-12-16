@@ -31,18 +31,6 @@ private:
             }
         }
 
-        /*
-        print_grid();
-
-        for (int currColumn = 0; currColumn < columns; currColumn++) {
-            for (int compareColumn = 0; compareColumn < columns; compareColumn++) {
-                cout << columnMatchesGrid[currColumn][compareColumn];
-            }
-            cout << endl;
-        }
-        cout << endl;
-        */
-
         bool leftSideMatch = false;
         int leftColumn = 0;
         for (int compareColumn = 1; compareColumn < columns && !leftSideMatch; compareColumn++) {
@@ -107,16 +95,6 @@ private:
                 }
             }
         }
-
-        /*
-        for (int currColumn = 0; currColumn < rows; currColumn++) {
-            for (int compareColumn = 0; compareColumn < rows; compareColumn++) {
-                cout << rowMatchesGrid[currColumn][compareColumn];
-            }
-            cout << endl;
-        }
-        cout << endl;
-        */
 
         bool topSideMatch = false;
         int topRow = 0;
